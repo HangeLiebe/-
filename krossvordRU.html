@@ -83,148 +83,40 @@
     <div class="legend">
         <h2>Вопросы:</h2>
         <ol>
-            <li>Главное новогоднее дерево (5 букв)</li>
-            <li>Салат, без которого не обходится праздник (7 букв)</li>
+            <li>Главное новогоднее дерево (4 буквы)</li>
+            <li>Салат, без которого не обходится праздник (6 букв)</li>
             <li>То, что ждут дети под ёлкой (7 букв)</li>
             <li>Бой часов в полночь (7 букв)</li>
             <li>Поздравляет страну с Новым годом по телевизору (9 букв)</li>
             <li>Цитрусовый фаворит праздничного стола (9 букв)</li>
             <li>С кем встречают Новый год? (5 букв)</li>
-            <li>Праздничный фейерверк в небе (6 букв)</li>
-            <li>Вера в то, что случится волшебство (5 букв)</li>
-            <li>Светящаяся цепочка на ёлке (9 букв)</li>
+            <li>Праздничный фейерверк в небе (5 букв)</li>
+            <li>Вера в то, что случится волшебство (4 буквы)</li>
+            <li>Светящаяся цепочка на ёлке (8 букв)</li>
         </ol>
     </div>
 
     <script>
-        // Сетка 15x15: null = чёрная клетка, иначе буква
-        const grid = Array(15).fill().map(() => Array(15).fill(null));
-
-        // Слова и их позиции: [направление, row, col, слово, номер]
-        // направление: 'h' — горизонтально, 'v' — вертикально
-        const words = [
-            ['h', 1, 5, "ЁЛКА", 1],         // 1-ёлка
-            ['h', 3, 2, "ОЛИВЬЕ", 2],       // 2-оливье
-            ['v', 1, 6, "ПОДАРКИ", 3],      // 3-подарки (пересекается с ёлкой по Л/О? — скорректируем)
-            ['v', 3, 5, "КУРАНТЫ", 4],      // 4-куранты
-            ['h', 7, 1, "ПРЕЗИДЕНТ", 5],    // 5-президент
-            ['v', 0, 9, "МАНДАРИНЫ", 6],   // 6-мандарины
-            ['h', 10, 4, "СЕМЬЯ", 7],       // 7-семья
-            ['v', 5, 12, "САЛЮТ", 8],       // 8-салют
-            ['h', 12, 6, "ЧУДО", 9],        // 9-чудо (4 буквы, но в списке "чудо" — 4? Написано "чудо" — 4 буквы, но в ТЗ — 5? Возможно, "чудеса"? Но ТЗ: "чудо" — 4. Ок.)
-            ['h', 14, 2, "ГИРЛЯНДА", 10]    // 10-гирлянда (9 букв)
-        ];
-
-        // Корректировка: "ЧУДО" — 4 буквы, но в ТЗ написано "чудо" (4). Оставим 4.
-        // Исправим пересечения вручную для корректного заполнения.
-
-        // Ручное заполнение — проще и надёжнее для небольшого кроссворда
-        // Матрица 15x15 (0–14), будем заполнять вручную:
-
-        // Очистим
-        for (let r = 0; r < 15; r++) {
-            for (let c = 0; c < 15; c++) {
-                grid[r][c] = null;
-            }
-        }
-
-        // 1. ЁЛКА (h, r=1, c=5–9)
-        const word1 = "ЁЛКА";
-        for (let i = 0; i < word1.length; i++) grid[1][5 + i] = word1[i];
-        grid[1][5] = {letter: 'Ё', num: 1};
-
-        // 2. ОЛИВЬЕ (h, r=3, c=2–8)
-        const word2 = "ОЛИВЬЕ";
-        for (let i = 0; i < word2.length; i++) grid[3][2 + i] = word2[i];
-        grid[3][2] = {letter: 'О', num: 2};
-
-        // 3. ПОДАРКИ (v, c=7, r=1–7) — пересечение: r=1,c=7 = 'Л' из "ЁЛКА"? Нет — Ё(5),Л(6),К(7),А(8) → на c=7 — 'К'
-        // Но "ПОДАРКИ" на c=7: П(r1),О(r2),Д(r3),А(r4),Р(r5),К(r6),И(r7) → на r=1,c=7 — 'П', но там 'К' — конфликт.
-        // Перенесём "ПОДАРКИ" на c=9 — там свободно.
-
-        // Пересчитаем размещение вручную для корректных пересечений:
-
-        // Обновлённый план:
-        // - ЁЛКА: r1, c5-8 (4 буквы: Ё,Л,К,А) — но "ёлка" = 4 буквы? Да: Ё-Л-К-А → 4.
-        // Ой! В русском "ёлка" — 4 буквы! В ТЗ сказано "ёлка" — 4. Но в описании выше я ошибся — 4.
-        // Аналогично: "чудо" — 4, "семья" — 5.
-
-        // Пересоберём аккуратно:
-
-        /*
-         План кроссворда (15x15):
-
-         0         1         2         3         4         5         6         7         8         9         10        11        12        13        14
-         0         .         .         .         .         .         .         .         .         М         .         .         .         .         .
-         1         .         .         .         .         .         Ё(1)      Л         К         А         А         .         .         .         .
-         2         .         .         .         .         .         .         .         .         .         Н         .         .         .         .
-         3         .         .         О(2)      Л         И         В         Ь         Е         .         Д         .         .         .         .
-         4         .         .         .         .         .         .         .         .         .         А         .         .         .         .
-         5         .         .         .         .         .         .         .         .         .         Р         .         .         С(8)      .
-         6         .         .         .         .         .         .         .         .         .         К         .         .         А         .
-         7         П(5)      Р         Е         З         И         Д         Е         Н         Т         И         .         .         Л         .
-         8         .         .         .         .         .         .         .         .         .         Н         .         .         Ю         .
-         9         .         .         .         .         .         .         .         .         .         Ы         .         .         Т         .
-         10        .         .         .         .         С(7)      Е         М         Ь         Я         .         .         .         .         .
-         11        .         .         .         .         .         .         .         .         .         .         .         .         .         .
-         12        .         .         .         .         .         .         Ч(9)      У         Д         О         .         .         .         .
-         13        .         .         .         .         .         .         .         .         .         .         .         .         .         .
-         14        .         .         Г(10)     И         Р         Л         Я         Н         Д         А         .         .         .         .
-        */
-
-        // Обнулим снова
-        for (let r = 0; r < 15; r++) grid[r].fill(null);
-
-        // 1. ЁЛКА (4) — r=1, c=5–8
-        "ЁЛКА".split('').forEach((ch, i) => grid[1][5 + i] = ch);
-        grid[1][5] = {letter: 'Ё', num: 1};
-
-        // 2. ОЛИВЬЕ (6) — r=3, c=2–7 ("ОЛИВЬЕ" = 6 букв? Нет: О-Л-И-В-Ь-Е → 6. Но обычно 7? "Оливье" — 7: О-Л-И-В-Ь-Е? → 6 символов. На самом деле — 6 букв (без ё).
-        // Уточнение: "оливье" пишется с 6 буквами: О, Л, И, В, Ь, Е — да, 6.
-        "ОЛИВЬЕ".split('').forEach((ch, i) => grid[3][2 + i] = ch);
-        grid[3][2] = {letter: 'О', num: 2};
-
-        // 3. ПОДАРКИ (7) — v, c=9, r=1–7 (П,О,Д,А,Р,К,И)
-        "ПОДАРКИ".split('').forEach((ch, i) => {
-            if (i === 0) {
-                grid[1][9] = {letter: ch, num: 3};
-            } else {
-                grid[1 + i][9] = ch;
-            }
-        });
-
-        // 4. КУРАНТЫ (7) — v, c=5, r=3–9: К(3),У(4),Р(5),А(6),Н(7),Т(8),Ы(9)
-        "КУРАНТЫ".split('').forEach((ch, i) => {
-            if (i === 0) {
-                // r=3,c=5 — там уже 'В' из "ОЛИВЬЕ" (c=5 → 3-й индекс в "ОЛИВЬЕ": О(2),Л(3),И(4),В(5) — да, r=3,c=5 = 'В')
-                // НО "КУРАНТЫ" должна начинаться с 'К', а там 'В' → конфликт!
-                // Перенесём "КУРАНТЫ" на c=11.
-            }
-        });
-
-        // Вместо автоматического — сделаем **ручное заполнение по согласованной схеме**:
-
-        // Зафиксируем сетку вручную (на основе ASCII-плана выше):
+        // Ручная сетка 15x15: null = чёрная клетка, строка = буква, "Б#N" = буква с номером подсказки
         const manualGrid = [
-            // 0         1         2         3         4         5         6         7         8         9         10        11        12        13        14
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'М',      null,     null,     null,     null,     null], // 0
-            [null,     null,     null,     null,     null,     'Ё#1',    'Л',      'К',      'А',      'А',      null,     null,     null,     null,     null], // 1
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'Н',      null,     null,     null,     null,     null], // 2
-            [null,     null,     'О#2',    'Л',      'И',      'В',      'Ь',      'Е',      null,     'Д',      null,     null,     null,     null,     null], // 3
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'А',      null,     null,     null,     null,     null], // 4
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'Р',      null,     null,     'С#8',    null,     null], // 5
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'К',      null,     null,     'А',      null,     null], // 6
-            ['П#5',    'Р',      'Е',      'З',      'И',      'Д',      'Е',      'Н',      'Т',      'И',      null,     null,     'Л',      null,     null], // 7
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'Н',      null,     null,     'Ю',      null,     null], // 8
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     'Ы',      null,     null,     'Т',      null,     null], // 9
-            [null,     null,     null,     null,     'С#7',    'Е',      'М',      'Ь',      'Я',      null,     null,     null,     null,     null,     null], //10
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null], //11
-            [null,     null,     null,     null,     null,     null,     'Ч#9',    'У',      'Д',      'О',      null,     null,     null,     null,     null], //12
-            [null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null,     null], //13
-            [null,     null,     'Г#10',   'И',      'Р',      'Л',      'Я',      'Н',      'Д',      'А',      null,     null,     null,     null,     null], //14
+            // 0    1    2    3    4     5       6    7    8      9       10   11    12    13   14
+            [null, null, null, null, null, null, null, null, null, 'М',     null, null, null, null, null], // 0
+            [null, null, null, null, null, 'Ё#1', 'Л', 'К', 'А', 'П#3',   null, null, null, null, null], // 1
+            [null, null, null, null, null, null, null, null, null, 'О',     null, null, null, null, null], // 2
+            [null, null, 'О#2', 'Л', 'И', 'В', 'Ь', 'Е', null, 'Д',       null, null, null, null, null], // 3
+            [null, null, null, null, null, null, null, null, null, 'А',     null, null, null, null, null], // 4
+            [null, null, null, null, null, null, null, null, null, 'Р',     null, null, 'С#8', null, null], // 5
+            [null, null, null, null, null, null, null, null, null, 'К',     null, null, 'А',   null, null], // 6
+            ['П#5','Р', 'Е', 'З', 'И', 'Д', 'Е', 'Н', 'Т', 'И',           null, null, 'Л',   null, null], // 7
+            [null, null, null, null, null, null, null, null, null, 'Н',     null, null, 'Ю',   null, null], // 8
+            [null, null, null, null, null, null, null, null, null, 'Ы',     null, null, 'Т',   null, null], // 9
+            [null, null, null, null, 'С#7','Е', 'М', 'Ь', 'Я', null,       null, null, null, null, null], //10
+            [null, null, null, null, null, null, null, null, null, null,    null, null, null, null, null], //11
+            [null, null, null, null, null, null, 'Ч#9','У', 'Д', 'О',       null, null, null, null, null], //12
+            [null, null, null, null, null, null, null, null, null, null,    null, null, null, null, null], //13
+            [null, null, 'Г#10','И','Р','Л','Я','Н','Д','А',                null, null, null, null, null], //14
         ];
 
-        // Генерация HTML
         const crossword = document.getElementById('cw');
         crossword.innerHTML = '';
 
@@ -240,7 +132,9 @@
                     let letter = val;
                     let num = null;
                     if (typeof val === 'string' && val.includes('#')) {
-                        [letter, num] = val.split('#');
+                        const parts = val.split('#');
+                        letter = parts[0];
+                        num = parts[1];
                         cell.classList.add('start');
                         cell.dataset.num = num;
                     }
